@@ -12,6 +12,7 @@ html, body, #root {
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -55,4 +56,24 @@ input[type="range"]::-moz-range-thumb {
   background: #3b82f6;
   cursor: pointer;
   border: 2px solid #1d4ed8;
+}
+
+/* Code viewer */
+pre {
+  margin: 0;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+  tab-size: 4;
+}
+
+pre code {
+  font-family: inherit;
+  white-space: pre;
+  word-break: normal;
+  word-wrap: normal;
+}
+
+/* Selection color */
+::selection {
+  background: rgba(59, 130, 246, 0.3);
+  color: #fff;
 }
