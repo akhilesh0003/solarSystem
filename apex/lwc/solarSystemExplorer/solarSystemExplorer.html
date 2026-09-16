@@ -1,0 +1,119 @@
+<template>
+    <div class="solar-system-app">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-left">
+                <span class="logo">🌌</span>
+                <h1>Solar System Explorer</h1>
+            </div>
+            <p class="header-hint">Click on any planet to learn more</p>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Canvas Area -->
+            <div class="canvas-container">
+                <template if:true={isLoading}>
+                    <div class="loading">Loading planet data...</div>
+                </template>
+
+                <canvas
+                    onmousedown={handleCanvasClick}
+                    onmousemove={handleCanvasMouseMove}
+                ></canvas>
+
+                <!-- Controls -->
+                <div class="controls">
+                    <button class="btn play-btn" onclick={handleTogglePlay} title="Play/Pause">
+                        <template if:true={isPlaying}>
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+                            </svg>
+                        </template>
+                        <template if:false={isPlaying}>
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                        </template>
+                    </button>
+
+                    <span class="speed-label">Speed:</span>
+                    <input
+                        type="range"
+                        class="speed-slider"
+                        min="0.1"
+                        max="5"
+                        step="0.1"
+                        value={speed}
+                        onchange={handleSpeedChange}
+                    />
+                    <span class="speed-value">{speed}x</span>
+                </div>
+            </div>
+
+            <!-- Info Panel -->
+            <template if:true={hasSelectedPlanet}>
+                <div class="info-panel">
+                    <div class="info-header">
+                        <h2>{selectedPlanet.name}</h2>
+                        <button class="close-btn" onclick={handleClosePanel}>✕</button>
+                    </div>
+
+                    <div class="planet-visual">
+                        <div style={selectedPlanetStyle}></div>
+                    </div>
+
+                    <p class="description">{selectedPlanet.description}</p>
+
+                    <div class="stats">
+                        <div class="stat-card">
+                            <span class="stat-icon">📏</span>
+                            <div>
+                                <p class="stat-label">Diameter</p>
+                                <p class="stat-value">{selectedPlanet.diameter} km</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-icon">☀️</span>
+                            <div>
+                                <p class="stat-label">Distance from Sun</p>
+                                <p class="stat-value">{selectedPlanet.distanceFromSun} million km</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-icon">🔄</span>
+                            <div>
+                                <p class="stat-label">Orbital Period</p>
+                                <p class="stat-value">{orbitalPeriodFormatted}</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-icon">🌡️</span>
+                            <div>
+                                <p class="stat-label">Planet Order</p>
+                                <p class="stat-value">{selectedPlanet.orderFromSun} from the Sun</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="planet-list">
+                        <h3>All Planets</h3>
+                        <div class="planet-grid">
+                            <template for:each={planets} for:item="planet" for:index="index">
+                                <button
+                                    key={planet.name}
+                                    class="planet-btn"
+                                    data-index={index}
+                                    onclick={handleSelectPlanet}
+                                >
+                                    <span class="planet-dot" style="background-color: {planet.color}"></span>
+                                    <span>{planet.name}</span>
+                                </button>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>
